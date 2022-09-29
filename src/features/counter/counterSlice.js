@@ -20,15 +20,28 @@ export const counterSlice = createSlice({
       state.value += action.payload;
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(incrementAsync.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(incrementAsync.fulfilled, (state, action) => {
+      state.status = "idle";
+      state.value += action.payload;
+    });
+  },
 });
 
 export const { increment, decrement, incrementByAmount } = counterSlice.actions;
 
-export const incrementAsync = (amount) => (dispatch) => {
-  setTimeout(() => {
-    dispatch(incrementByAmount(amount));
-  }, 1000);
-};
+export const incrementAsync = createAsyncThunk(
+  //name
+  "counter/fetchCount",
+  // async thunk function
+  async (amount) => {
+    const res = await fetchCount(amount);
+    return res.data;
+  }
+);
 
 export const incrementIfOdd = (amount) => (dispatch, getState) => {
   const currentValue = selectCount(getState());
