@@ -2,7 +2,7 @@ import { rest, setupWorker } from 'msw'
 import { factory, oneOf, manyOf, primaryKey } from '@mswjs/data'
 import { nanoid } from '@reduxjs/toolkit'
 
-import faker from 'faker'
+import { faker } from '@faker-js/faker'
 import seedrandom from 'seedrandom'
 
 import { Server as MockSocketServer } from 'mock-socket'
