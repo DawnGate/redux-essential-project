@@ -7,8 +7,10 @@ import {
 } from 'react-router-dom'
 import { Navbar } from './app/Navbar'
 import { AddPostForm } from './components/posts/AddPostForm'
+import { EditPostForm } from './components/posts/EditPostForm'
 
 import { PostsList } from './components/posts/PostsList'
+import { SinglePostPage } from './components/posts/SinglePostPage'
 
 function App() {
   return (
@@ -26,6 +28,9 @@ function App() {
               </React.Fragment>
             }
           />
+          <Route exact path="/posts/:postId" element={<SinglePostPage />} />
+          <Route exact path="/editPost/:postId" element={<EditPostForm />} />
+
           <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </div>

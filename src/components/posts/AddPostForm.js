@@ -37,13 +37,12 @@ export const AddPostForm = () => {
           onChange={onTitleChanged}
         ></input>
         <label htmlFor="postContent">Post Content: </label>
-        <input
-          type="text"
+        <textarea
           id="postContent"
           value={content}
           name="postContent"
           onChange={onContentChanged}
-        ></input>
+        ></textarea>
         <button type="button" onClick={onSavePostClicked}>
           Save Post
         </button>
