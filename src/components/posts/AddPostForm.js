@@ -1,12 +1,13 @@
 // import { nanoid } from '@reduxjs/toolkit'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { postAdded } from '../../slices/posts/postsSlice'
+import { addNewPost } from '../../slices/posts/postsSlice'
 
 export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [userId, setUserId] = useState('')
+  const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
   const onTitleChanged = (e) => setTitle(e.target.value)
   const onContentChanged = (e) => setContent(e.target.value)
@@ -16,22 +17,28 @@ export const AddPostForm = () => {
 
   const users = useSelector((state) => state.users)
 
-  const onSavePostClicked = () => {
-    if (title && content) {
-      dispatch(
-        postAdded(
-          //   id: nanoid(),
-          title,
-          content,
-          userId
-        )
-      )
-      setTitle('')
-      setContent('')
+  const canSave =
+    [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
+
+  const onSavePostClicked = async () => {
+    if (canSave) {
+      try {
+        setAddRequestStatus('pending')
+        //upwrap is a new promise of thunk, using for create state of post request
+        await dispatch(addNewPost({ title, content, user: userId })).unwrap()
+        //
+        setTitle('')
+        setContent('')
+        setUserId('')
+      } catch (err) {
+        console.log('Fail to save post: ', err)
+      } finally {
+        setAddRequestStatus('idle')
+      }
     }
   }
 
-  const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
+  //   const canSave = Boolean(title) && Boolean(content) && Boolean(userId)
 
   const usersOptions = users.map((user) => (
     <option key={user.id} value={user.id}>

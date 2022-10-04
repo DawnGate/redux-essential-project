@@ -13,7 +13,7 @@ const NUM_USERS = 3
 const POSTS_PER_USER = 3
 const RECENT_NOTIFICATIONS_DAYS = 7
 
-const ARTIFICIAL_DELAY_MS = 7
+const ARTIFICIAL_DELAY_MS = 2000
 
 let useSeededRNG = true
 
@@ -104,7 +104,7 @@ const createPostData = (user) => {
 }
 
 for (let i = 0; i < NUM_USERS; i++) {
-  const author = db.user.create(createUserData)
+  const author = db.user.create(createUserData())
   for (let j = 0; j < POSTS_PER_USER; j++) {
     const newPost = createPostData(author)
     db.post.create(newPost)

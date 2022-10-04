@@ -6,18 +6,20 @@ import App from './App'
 import reportWebVitals from './reportWebVitals'
 import './index.css'
 import { worker } from './api/server'
+import { fetchUsers } from './slices/users/usersSlice'
 
 const container = document.getElementById('root')
 const root = createRoot(container)
 
 async function start() {
   await worker.start({ onUnhandleRequest: 'bypass' })
+  store.dispatch(fetchUsers())
   return root.render(
-    <React.StrictMode>
-      <Provider store={store}>
-        <App />
-      </Provider>
-    </React.StrictMode>
+    // <React.StrictMode>
+    <Provider store={store}>
+      <App />
+    </Provider>
+    // </React.StrictMode>
   )
 }
 
