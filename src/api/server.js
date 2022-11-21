@@ -147,7 +147,7 @@ export const handlers = [
     const post = db.post.findFirst({
       where: { id: { equals: req.params.postId } },
     })
-    return post
+    return res(ctx.delay(ARTIFICIAL_DELAY_MS), ctx.json(serializePost(post)))
   }),
   rest.patch('/fakeApi/posts/:postId', function (req, res, ctx) {
     const { id, ...data } = req.body
@@ -157,7 +157,7 @@ export const handlers = [
     })
     return res(
       ctx.delay(ARTIFICIAL_DELAY_MS),
-      ctx.delay(serializePost(updatedPost))
+      ctx.json(serializePost(updatedPost))
     )
   }),
   rest.get('/fakeApi/posts/:postId/comments', function (req, res, ctx) {

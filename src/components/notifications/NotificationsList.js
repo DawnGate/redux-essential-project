@@ -17,8 +17,6 @@ export const NotificationsList = () => {
     dispatch(allNotificationsRead())
   })
 
-  console.log(notifications)
-
   const renderedNotifications = notifications.map((notification) => {
     const date = parseISO(notification.date)
     const timeAgo = formatDistanceToNow(date)

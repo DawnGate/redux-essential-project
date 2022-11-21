@@ -1,6 +1,7 @@
 // import { nanoid } from '@reduxjs/toolkit'
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useAddNewPostMutation } from '../../features/api/apiSlice'
 import { addNewPost } from '../../slices/posts/postsSlice'
 import { selectAllUsers } from '../../slices/users/usersSlice'
 
@@ -8,33 +9,38 @@ export const AddPostForm = () => {
   const [title, setTitle] = useState('')
   const [content, setContent] = useState('')
   const [userId, setUserId] = useState('')
-  const [addRequestStatus, setAddRequestStatus] = useState('idle')
+  // const [addRequestStatus, setAddRequestStatus] = useState('idle')
 
   const onTitleChanged = (e) => setTitle(e.target.value)
   const onContentChanged = (e) => setContent(e.target.value)
   const onAuthorChanged = (e) => setUserId(e.target.value)
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
 
+  const [addNewPost, { isLoading }] = useAddNewPostMutation()
   const users = useSelector(selectAllUsers)
 
-  const canSave =
-    [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
+  // const canSave =
+  // [title, content, userId].every(Boolean) && addRequestStatus === 'idle'
+
+  const canSave = [title, content, userId].every(Boolean) && !isLoading
 
   const onSavePostClicked = async () => {
     if (canSave) {
       try {
-        setAddRequestStatus('pending')
-        //upwrap is a new promise of thunk, using for create state of post request
-        await dispatch(addNewPost({ title, content, user: userId })).unwrap()
+        // setAddRequestStatus('pending')
+        //upwrap is a new promise of thunk, using for create state of post request, it using for try catch block when error occur
+        // await dispatch(addNewPost({ title, content, user: userId })).unwrap()
         //
+
+        await addNewPost({ title, content, user: userId }).unwrap()
         setTitle('')
         setContent('')
         setUserId('')
       } catch (err) {
         console.log('Fail to save post: ', err)
       } finally {
-        setAddRequestStatus('idle')
+        // setAddRequestStatus('idle')
       }
     }
   }
