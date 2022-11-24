@@ -36,6 +36,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
       query: () => '/users',
       transformResponse: (responseData) => {
         // capture response data before it can store to cached
+        // use adapter to change query data to {ids: [], entities: []}
         return usersAdapter.setAll(initialState, responseData)
       },
     }),
@@ -67,7 +68,6 @@ const selectUsersData = createSelector(selectUsersResult, (usersResult) => {
 
 export const { selectAll: selectAllUsers, selectById: selectUserById } =
   usersAdapter.getSelectors((state) => {
-    // console.log(state)
     return selectUsersData(state) ?? initialState
   })
 

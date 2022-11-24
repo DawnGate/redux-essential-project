@@ -17,11 +17,11 @@ async function start() {
   // store.dispatch(fetchUsers())
   store.dispatch(userApiSlice.endpoints.getUsers.initiate())
   return root.render(
-    // <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-    // </React.StrictMode>
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
   )
 }
 
