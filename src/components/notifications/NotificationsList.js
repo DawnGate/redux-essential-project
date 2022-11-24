@@ -5,12 +5,16 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
   allNotificationsRead,
   selectAllNotifications,
+  useGetNotificationsQuery,
+  selectMetadatEntities,
 } from '../../slices/notifications/notificationsSlice'
 import { selectAllUsers } from '../../slices/users/usersSlice'
 
 export const NotificationsList = () => {
   const dispatch = useDispatch()
-  const notifications = useSelector(selectAllNotifications)
+  // const notifications = useSelector(selectAllNotifications)
+  const { data: notifications = [] } = useGetNotificationsQuery()
+  const notificationsMetadata = useSelector(selectMetadatEntities)
   const users = useSelector(selectAllUsers)
 
   useLayoutEffect(() => {
@@ -23,8 +27,11 @@ export const NotificationsList = () => {
     const user = users.find((user) => user.id === notification.user) || {
       name: 'Unknown Users',
     }
+
+    const metadata = notificationsMetadata[notification.id]
+
     const notificationClassname = classNames('notification', {
-      new: notification.isNew,
+      new: metadata.isNew,
     })
 
     return (

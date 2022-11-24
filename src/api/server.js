@@ -236,6 +236,8 @@ export const forceGenerateNotifications = (since) => {
 socketServer.on('connection', (socket) => {
   currentSocket = socket
 
+  console.log('connected')
+
   socket.on('message', (data) => {
     const message = JSON.parse(data)
 
