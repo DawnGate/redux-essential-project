@@ -74,7 +74,7 @@ export const db = factory({
   reaction: {
     id: primaryKey(nanoid),
     thumbsUp: Number,
-    hoorey: Number,
+    hooray: Number,
     heart: Number,
     rocket: Number,
     eyes: Number,
@@ -183,10 +183,11 @@ export const handlers = [
       data: {
         reactions: {
           ...post.reactions,
-          [reaction]: post.reactions[reaction] + 1,
+          [reaction]: (post.reactions[reaction] += 1),
         },
       },
     })
+
     return res(
       ctx.delay(ARTIFICIAL_DELAY_MS),
       ctx.json(serializePost(updatedPost))

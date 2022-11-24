@@ -40,6 +40,36 @@ export const apiSlice = createApi({
       }),
       invalidatesTags: (result, error, arg) => [{ type: 'Post', id: arg.id }],
     }),
+    addReaction: builder.mutation({
+      query: ({ reaction, postId }) => ({
+        url: `/posts/${postId}/reactions`,
+        method: 'POST',
+        body: { reaction },
+      }),
+      // this invalidate make api call new getPost api to update
+      // posts current cache
+      //   invalidatesTags: (result, error, arg) => [
+      //     { type: 'Post', id: arg.postId },
+      //   ],
+      // this is a optimize approach call update optimise
+      // this effect on user experience first
+      async onQueryStarted({ reaction, postId }, { dispatch, queryFulfilled }) {
+        const patchResult = dispatch(
+          apiSlice.util.updateQueryData('getPosts', undefined, (draft) => {
+            const post = draft.find((post) => post.id === postId)
+            if (post) {
+              post.reactions[reaction]++
+            }
+          })
+        )
+
+        try {
+          await queryFulfilled
+        } catch {
+          patchResult.undo()
+        }
+      },
+    }),
     // user api
     // getUsers: builder.query({
     //   query: () => '/users',
@@ -52,5 +82,6 @@ export const {
   useGetPostQuery,
   useAddNewPostMutation,
   useEditPostMutation,
+  useAddReactionMutation,
   //   useGetUsersQuery,
 } = apiSlice
